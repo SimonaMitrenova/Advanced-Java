@@ -2,9 +2,9 @@ package com.company;
 
 public class ExceptionMessages {
 
-    public static final String DATA_ALREADY_INITIALIZED = "StudentRepository is already initialized.";
+    public static final String DATA_ALREADY_INITIALIZED = "Data is already initialized.";
 
-    public static final String DATA_NOT_INITIALIZED = "StudentRepository is not initialized.";
+    public static final String DATA_NOT_INITIALIZED = "Data is not initialized.";
 
     public static final String NOR_EXISTING_COURSE = "Course does not exist.";
 

@@ -12,6 +12,10 @@ public class CommandInterpreter {
                 tryOpenFile(input, data);
                 break;
 
+            case "show":
+                tryShowWantedCourse(input, data);
+                break;
+
             case "mkdir":
                 tryCreateDirectory(input, data);
                 break;
@@ -61,6 +65,22 @@ public class CommandInterpreter {
                 break;
         }
     }
+
+    private static void tryShowWantedCourse(String input, String[] data) {
+        if (data.length != 2 && data.length != 3){
+            displayInvalidCommandMessage(input);
+            return;
+        }
+
+        if (data.length == 2){
+            String courseName = data[1];
+            StudentRepository.getStudentsByCourse(courseName);
+        } else {
+            String courseName = data[1];
+            String student = data[2];
+            StudentRepository.getStudentMarksInCourse(courseName, student);
+        }
+    }   
 
     private static void displayInvalidCommandMessage(String input) {
         String output = String.format("The command %s is invalid", input);
