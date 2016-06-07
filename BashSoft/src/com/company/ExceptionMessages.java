@@ -21,4 +21,8 @@ public class ExceptionMessages {
     public static final String CANNOT_ACCESS_FILE = "Cannot access file.";
 
     public static final String INVALID_DESTINATION = "Cannot go higher in folder hierarchy.";
+
+    public static final String INVALID_FILTER = "Invalid filter.";
+
+    public static final String INVALID_COMPARISON_TYPE = "Invalid comparison type.";
 }

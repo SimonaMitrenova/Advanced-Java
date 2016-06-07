@@ -44,6 +44,29 @@ public class StudentRepository {
         }
     }
 
+    public static void printFilteredStudents(String course, String filter, Integer numberOfStudents){
+        if (!isQueryForCoursePossible(course)){
+            return;
+        }
+
+        if (numberOfStudents == null){
+            numberOfStudents = studentsByCourse.get(course).size();
+        }
+        RepositoryFilters.printFilteredStudents(studentsByCourse.get(course), filter, numberOfStudents);
+    }
+
+    public static void printOrderedStudents(String course, String comparisonType, Integer numberOfStudents){
+        if (!isQueryForCoursePossible(course)){
+            return;
+        }
+
+        if (numberOfStudents == null){
+            numberOfStudents = studentsByCourse.get(course).size();
+        }
+
+        RepositorySorters.printSortedStudents(studentsByCourse.get(course), comparisonType, numberOfStudents);
+    }
+
     private static void readData(String fileName) throws IOException {
         String regex = "([A-Z][a-zA-Z+#]*_[A-Z][a-z]{2}_\\d{4})\\s+([A-Z][a-z]{0,3}\\d{2}_\\d{2,4})\\s+(\\d+)";
         Pattern pattern = Pattern.compile(regex);

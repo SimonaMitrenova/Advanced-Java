@@ -41,11 +41,11 @@ public class CommandInterpreter {
                 break;
 
             case "filter":
-                filterStudents(data);
+                tryPrintFilteredStudents(input, data);
                 break;
 
             case "order":
-                orderStudents(data);
+                tryPrintOrderedStudents(input, data);
                 break;
 
             case "download":
@@ -113,12 +113,36 @@ public class CommandInterpreter {
         // TODO
     }
 
-    private static void orderStudents(String[] data) {
-        // TODO
+    private static void tryPrintOrderedStudents(String input, String[] data) {
+        if (data.length != 3 && data.length != 4){
+            displayInvalidCommandMessage(input);
+            return;
+        }
+
+        String course = data[1];
+        String comparisonType = data[2];
+        Integer numberOfStudents = null;
+        if (data.length == 4){
+            numberOfStudents = Integer.parseInt(data[3]);
+        }
+
+        StudentRepository.printOrderedStudents(course, comparisonType, numberOfStudents);
     }
 
-    private static void filterStudents(String[] data) {
-        // TODO
+    private static void tryPrintFilteredStudents(String input, String[] data) {
+        if (data.length != 3 && data.length != 4){
+            displayInvalidCommandMessage(input);
+            return;
+        }
+
+        String course = data[1];
+        String filter = data[2];
+        Integer numberOfStudents = null;
+        if (data.length == 4){
+            numberOfStudents = Integer.parseInt(data[3]);
+        }
+
+        StudentRepository.printFilteredStudents(course, filter, numberOfStudents);
     }
 
     private static void tryReadDatabaseFromFile(String input, String[] data) {
