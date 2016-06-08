@@ -1,6 +1,7 @@
-package com.company;
+package com.company.Judge;
 
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
+import com.company.StaticData.ExceptionMessages;
+import com.company.IO.OutputWriter;
 
 import java.io.*;
 import java.util.ArrayList;

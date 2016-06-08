@@ -1,4 +1,7 @@
-package com.company;
+package com.company.IO;
+
+import com.company.CommandInterpreter;
+import com.company.StaticData.SessionData;
 
 import java.util.Scanner;
 

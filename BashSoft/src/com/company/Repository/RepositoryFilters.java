@@ -1,4 +1,7 @@
-package com.company;
+package com.company.Repository;
+
+import com.company.StaticData.ExceptionMessages;
+import com.company.IO.OutputWriter;
 
 import java.util.HashMap;
 import java.util.List;
@@ -22,8 +25,9 @@ public class RepositoryFilters {
                 break;
             }
             List<Integer> studentMarks = courseData.get(student);
-            double averageMark = getStudentAverageGrade(studentMarks);
-            if (filter.test(averageMark)){
+            double averageMark = studentMarks.stream().mapToInt(Integer::valueOf).average().getAsDouble();
+            double mark = (averageMark / 100) * 4 + 2;
+            if (filter.test(mark)){
                 OutputWriter.displayStudent(student, studentMarks);
                 studentsCount++;
             }
@@ -44,11 +48,5 @@ public class RepositoryFilters {
             default:
                 return null;
         }
-    }
-
-    private static double getStudentAverageGrade(List<Integer> grades){
-        double totalScore = grades.stream().reduce(0, Integer::sum);
-        double percentage = totalScore / (grades.size() * 100);
-        return (percentage * 4) + 2;
     }
 }

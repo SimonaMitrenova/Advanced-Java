@@ -1,4 +1,4 @@
-package com.company;
+package com.company.StaticData;
 
 public class ExceptionMessages {
 
@@ -14,8 +14,6 @@ public class ExceptionMessages {
 
     public static final String FILE_DOES_NOT_EXIST = "File does not exist.";
 
-    public static final String ERROR = "Error.";
-
     public static final String INVALID_OUTPUT_LENGTH = "Actual and expected files are with different length.";
 
     public static final String CANNOT_ACCESS_FILE = "Cannot access file.";
@@ -23,6 +21,4 @@ public class ExceptionMessages {
     public static final String INVALID_DESTINATION = "Cannot go higher in folder hierarchy.";
 
     public static final String INVALID_FILTER = "Invalid filter.";
-
-    public static final String INVALID_COMPARISON_TYPE = "Invalid comparison type.";
 }
