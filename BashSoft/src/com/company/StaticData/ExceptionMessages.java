@@ -21,4 +21,6 @@ public class ExceptionMessages {
     public static final String INVALID_DESTINATION = "Cannot go higher in folder hierarchy.";
 
     public static final String INVALID_FILTER = "Invalid filter.";
+
+    public static final String INVALID_PATH = "Invalid path.";
 }

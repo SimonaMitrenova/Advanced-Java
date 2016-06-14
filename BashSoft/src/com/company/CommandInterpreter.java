@@ -2,6 +2,7 @@ package com.company;
 
 import com.company.IO.OutputWriter;
 import com.company.Judge.Tester;
+import com.company.Network.DowloadManager;
 import com.company.Repository.StudentRepository;
 import com.company.StaticData.SessionData;
 
@@ -54,11 +55,11 @@ public class CommandInterpreter {
                 break;
 
             case "download":
-                downloadFile(data);
+                downloadFile(input, data);
                 break;
 
             case "downloadAsynch":
-                downloadFileAsync(data);
+                downloadFileAsync(input, data);
                 break;
 
             case "help":
@@ -103,19 +104,27 @@ public class CommandInterpreter {
             }
             OutputWriter.writeEmptyLine();
 
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        }  catch (IOException e) {
+            OutputWriter.displayException(e.getMessage());
         }
     }
 
-    private static void downloadFileAsync(String[] data) {
-        // TODO
+    private static void downloadFileAsync(String input, String[] data) {
+        if (data.length != 2){
+            displayInvalidCommandMessage(input);
+            return;
+        }
+        String fileUrl = data[1];
+        DowloadManager.downloadOnNewThread(fileUrl);
     }
 
-    private static void downloadFile(String[] data) {
-        // TODO
+    private static void downloadFile(String input, String[] data) {
+        if (data.length != 2){
+            displayInvalidCommandMessage(input);
+            return;
+        }
+        String fileUrl = data[1];
+        DowloadManager.download(fileUrl);
     }
 
     private static void tryPrintOrderedStudents(String input, String[] data) {
