@@ -12,27 +12,29 @@ import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 
-public class DowloadManager {
+public class DownloadManager {
     public static void download(String fileUrl) {
 
         URL url = null;
         ReadableByteChannel channel = null;
         FileOutputStream writer = null;
 
-        try{
-            OutputWriter.writeMessageOnNewLine("Started downloading...");
+        try {
+            if (Thread.currentThread().getName().equals("main")){
+                OutputWriter.writeMessageOnNewLine("Started downloading...");
+            }
             url = new URL(fileUrl);
             channel = Channels.newChannel(url.openStream());
             String fileName = extractNameOfFile(url.toString());
             File file = new File(SessionData.currentPath + "/" + fileName);
             writer = new FileOutputStream(file);
             writer.getChannel().transferFrom(channel, 0 , Long.MAX_VALUE);
-            OutputWriter.writeMessageOnNewLine("Download complete.");
+            if (Thread.currentThread().getName().equals("main")){
+                OutputWriter.writeMessageOnNewLine("Download complete.");
+            }
 
-        } catch (MalformedURLException e) {
-            OutputWriter.displayException(e.getMessage());
         } catch (IOException e) {
-            e.printStackTrace();
+            OutputWriter.displayException(e.getMessage());
         } finally {
             try{
                 if (channel != null){
@@ -49,6 +51,8 @@ public class DowloadManager {
 
     public static void downloadOnNewThread(String fileUrl){
         Thread thread = new Thread(() -> download(fileUrl));
+        OutputWriter.writeMessageOnNewLine(String.format("Worker thread %d started download...", thread.getId()));
+        thread.setDaemon(false);
         thread.start();
     }
 

@@ -29,7 +29,7 @@ public class InputReader {
         Thread.enumerate(threads);
         for (Thread thread : threads) {
             try{
-                if (!thread.getName().equals("main")){
+                if (!thread.getName().equals("main") && !thread.isDaemon()){
                     thread.join();
                 }
             } catch (InterruptedException e) {

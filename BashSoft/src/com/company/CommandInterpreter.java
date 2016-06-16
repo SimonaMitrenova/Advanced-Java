@@ -2,7 +2,7 @@ package com.company;
 
 import com.company.IO.OutputWriter;
 import com.company.Judge.Tester;
-import com.company.Network.DowloadManager;
+import com.company.Network.DownloadManager;
 import com.company.Repository.StudentRepository;
 import com.company.StaticData.SessionData;
 
@@ -115,7 +115,7 @@ public class CommandInterpreter {
             return;
         }
         String fileUrl = data[1];
-        DowloadManager.downloadOnNewThread(fileUrl);
+        DownloadManager.downloadOnNewThread(fileUrl);
     }
 
     private static void downloadFile(String input, String[] data) {
@@ -124,7 +124,7 @@ public class CommandInterpreter {
             return;
         }
         String fileUrl = data[1];
-        DowloadManager.download(fileUrl);
+        DownloadManager.download(fileUrl);
     }
 
     private static void tryPrintOrderedStudents(String input, String[] data) {
