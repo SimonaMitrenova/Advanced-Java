@@ -1,8 +1,8 @@
-package com.company.Network;
+package com.company.network;
 
-import com.company.IO.OutputWriter;
-import com.company.StaticData.ExceptionMessages;
-import com.company.StaticData.SessionData;
+import com.company.io.OutputWriter;
+import com.company.staticData.ExceptionMessages;
+import com.company.staticData.SessionData;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -15,7 +15,7 @@ import java.nio.channels.ReadableByteChannel;
 public class DownloadManager {
     public static void download(String fileUrl) {
 
-        URL url = null;
+        URL url;
         ReadableByteChannel channel = null;
         FileOutputStream writer = null;
 
@@ -51,8 +51,9 @@ public class DownloadManager {
 
     public static void downloadOnNewThread(String fileUrl){
         Thread thread = new Thread(() -> download(fileUrl));
-        OutputWriter.writeMessageOnNewLine(String.format("Worker thread %d started download...", thread.getId()));
-        thread.setDaemon(false);
+        OutputWriter.writeMessageOnNewLine(String.format(
+                "Worker thread %d started download...", thread.getId()));
+        SessionData.threadPool.add(thread);
         thread.start();
     }
 

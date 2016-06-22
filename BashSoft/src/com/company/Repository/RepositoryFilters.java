@@ -1,27 +1,31 @@
-package com.company.Repository;
+package com.company.repository;
 
-import com.company.StaticData.ExceptionMessages;
-import com.company.IO.OutputWriter;
+import com.company.staticData.ExceptionMessages;
+import com.company.io.OutputWriter;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.function.Predicate;
 
 public class RepositoryFilters {
-    public static void printFilteredStudents(HashMap<String, List<Integer>> courseData, String filterType, int numberOfStudents){
-        Predicate<Double> predicate = createPredicate(filterType);
-        filterAndTake(predicate, courseData, numberOfStudents);
-    }
+    public static void printFilteredStudents(
+            HashMap<String, List<Integer>> courseData,
+            String filterType,
+            int numberOfStudents){
+        Predicate<Double> filter = createPredicate(filterType);
 
-    private static void filterAndTake(Predicate<Double> filter, HashMap<String, List<Integer>> courseData, int numberOfStudents){
-        if (filter == null){
+        if (filter == null) {
             OutputWriter.displayException(ExceptionMessages.INVALID_FILTER);
             return;
         }
 
+        filterAndTake(filter, courseData, numberOfStudents);
+    }
+
+    private static void filterAndTake(Predicate<Double> filter, HashMap<String, List<Integer>> courseData, int numberOfStudents){
         int studentsCount = 0;
         for (String student : courseData.keySet()) {
-            if (studentsCount == numberOfStudents){
+            if (studentsCount >= numberOfStudents){
                 break;
             }
             List<Integer> studentMarks = courseData.get(student);

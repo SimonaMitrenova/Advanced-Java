@@ -1,9 +1,11 @@
-package com.company.Judge;
+package com.company.judge;
 
-import com.company.StaticData.ExceptionMessages;
-import com.company.IO.OutputWriter;
+import com.company.staticData.ExceptionMessages;
+import com.company.io.OutputWriter;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +30,10 @@ public class Tester {
         }
     }
 
-    private static boolean compareStrings(List<String> actualOutputString, List<String> expectedOutputString, String mismatchPath) {
+    private static boolean compareStrings(
+            List<String> actualOutputString,
+            List<String> expectedOutputString,
+            String mismatchPath) {
         OutputWriter.writeMessageOnNewLine("Comparing files ...");
         boolean isMismatch = false;
 
@@ -78,5 +83,16 @@ public class Tester {
         int index = expectedOutput.lastIndexOf('\\');
         String directoryPath = expectedOutput.substring(0, index);
         return directoryPath + "\\mismatch.txt";
+    }
+
+    private static void printOutput(String mismatchPath, boolean isMismatch) throws IOException {
+        if (isMismatch)
+        {
+            List<String> mismatchStrings = Files.readAllLines(Paths.get(mismatchPath));
+            mismatchStrings.forEach(OutputWriter::writeMessageOnNewLine);
+            return;
+        }
+
+        OutputWriter.writeMessageOnNewLine("Files are identical. There are no mismatches.");
     }
 }

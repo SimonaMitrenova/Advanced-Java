@@ -1,10 +1,12 @@
-package com.company;
+package com.company.io;
 
-import com.company.IO.OutputWriter;
-import com.company.Judge.Tester;
-import com.company.Network.DownloadManager;
-import com.company.Repository.StudentRepository;
-import com.company.StaticData.SessionData;
+import com.company.io.IOManager;
+import com.company.io.OutputWriter;
+import com.company.judge.Tester;
+import com.company.network.DownloadManager;
+import com.company.repository.StudentRepository;
+import com.company.staticData.ExceptionMessages;
+import com.company.staticData.SessionData;
 
 import java.awt.*;
 import java.io.*;
@@ -12,14 +14,10 @@ import java.io.*;
 public class CommandInterpreter {
     public static void interpretCommand(String input){
         String[] data = input.split("\\s+");
-        String command = data[0];
+        String command = data[0].toLowerCase();
         switch (command){
             case "open":
                 tryOpenFile(input, data);
-                break;
-
-            case "show":
-                tryShowWantedCourse(input, data);
                 break;
 
             case "mkdir":
@@ -34,16 +32,24 @@ public class CommandInterpreter {
                 tryCompareFiles(input, data);
                 break;
 
-            case "changeDirRel":
+            case "cdrel":
                 tryChangeRelativePath(input, data);
                 break;
 
-            case "changeDirAbs":
+            case "cdabs":
                 tryChangeAbsolutePath(input, data);
                 break;
 
-            case "readDb":
+            case "readdb":
                 tryReadDatabaseFromFile(input, data);
+                break;
+
+            case "help":
+                tryGetHelp(input, data);
+                break;
+
+            case "show":
+                tryShowWantedCourse(input, data);
                 break;
 
             case "filter":
@@ -55,15 +61,11 @@ public class CommandInterpreter {
                 break;
 
             case "download":
-                downloadFile(input, data);
+                tryDownloadFile(input, data);
                 break;
 
-            case "downloadAsynch":
-                downloadFileAsync(input, data);
-                break;
-
-            case "help":
-                getHelp();
+            case "downloadasynch":
+                tryDownloadFileOnNewThread(input, data);
                 break;
 
             default:
@@ -93,7 +95,16 @@ public class CommandInterpreter {
         OutputWriter.writeMessageOnNewLine(output);
     }
 
-    private static void getHelp() {
+    private static void tryGetHelp(String input, String[] data) {
+        if (data.length != 1) {
+            displayInvalidCommandMessage(input);
+            return;
+        }
+
+        displayHelp();
+    }
+
+    private static void displayHelp() {
         try (BufferedReader reader = new BufferedReader(new FileReader("resources\\getHelp.txt"))){
             while (true){
                 String line = reader.readLine();
@@ -109,7 +120,7 @@ public class CommandInterpreter {
         }
     }
 
-    private static void downloadFileAsync(String input, String[] data) {
+    private static void tryDownloadFileOnNewThread(String input, String[] data) {
         if (data.length != 2){
             displayInvalidCommandMessage(input);
             return;
@@ -118,7 +129,7 @@ public class CommandInterpreter {
         DownloadManager.downloadOnNewThread(fileUrl);
     }
 
-    private static void downloadFile(String input, String[] data) {
+    private static void tryDownloadFile(String input, String[] data) {
         if (data.length != 2){
             displayInvalidCommandMessage(input);
             return;
@@ -128,35 +139,72 @@ public class CommandInterpreter {
     }
 
     private static void tryPrintOrderedStudents(String input, String[] data) {
-        if (data.length != 3 && data.length != 4){
+        if (data.length != 5) {
             displayInvalidCommandMessage(input);
             return;
         }
 
-        String course = data[1];
-        String comparisonType = data[2];
-        Integer numberOfStudents = null;
-        if (data.length == 4){
-            numberOfStudents = Integer.parseInt(data[3]);
+        String courseName = data[1];
+        String orderType = data[2].toLowerCase();
+        String takeCommand = data[3].toLowerCase();
+        String takeQuantity = data[4].toLowerCase();
+
+        tryParseParametersForOrder(takeCommand, takeQuantity, courseName, orderType);
+    }
+    private static void tryParseParametersForOrder(
+            String takeCommand, String takeQuantity,
+            String courseName, String orderType) {
+        if (!takeCommand.equals("take")) {
+            OutputWriter.displayException(ExceptionMessages.INVALID_TAKE_COMMAND);
+            return;
         }
 
-        StudentRepository.printOrderedStudents(course, comparisonType, numberOfStudents);
+        if (takeQuantity.equals("all")) {
+            StudentRepository.orderAndTake(courseName, orderType);
+            return;
+        }
+
+        try {
+            int studentsToTake = Integer.parseInt(takeQuantity);
+            StudentRepository.orderAndTake(courseName, orderType, studentsToTake);
+        } catch (NumberFormatException nfe) {
+            OutputWriter.displayException(ExceptionMessages.INVALID_TAKE_QUANTITY_PARAMETER);
+        }
     }
 
     private static void tryPrintFilteredStudents(String input, String[] data) {
-        if (data.length != 3 && data.length != 4){
+        if (data.length != 5) {
             displayInvalidCommandMessage(input);
             return;
         }
 
         String course = data[1];
-        String filter = data[2];
-        Integer numberOfStudents = null;
-        if (data.length == 4){
-            numberOfStudents = Integer.parseInt(data[3]);
+        String filter = data[2].toLowerCase();
+        String takeCommand = data[3].toLowerCase();
+        String takeQuantity = data[4].toLowerCase();
+
+        tryParseParametersForFilter(takeCommand, takeQuantity, course, filter);
+    }
+
+    private static void tryParseParametersForFilter(
+            String takeCommand, String takeQuantity,
+            String courseName, String filter) {
+        if (!takeCommand.equals("take")) {
+            OutputWriter.displayException(ExceptionMessages.INVALID_TAKE_COMMAND);
+            return;
         }
 
-        StudentRepository.printFilteredStudents(course, filter, numberOfStudents);
+        if (takeQuantity.equals("all")) {
+            StudentRepository.filterAndTake(courseName, filter);
+            return;
+        }
+
+        try {
+            int studentsToTake = Integer.parseInt(takeQuantity);
+            StudentRepository.filterAndTake(courseName, filter, studentsToTake);
+        } catch (NumberFormatException nfe) {
+            OutputWriter.displayException(ExceptionMessages.INVALID_TAKE_QUANTITY_PARAMETER);
+        }
     }
 
     private static void tryReadDatabaseFromFile(String input, String[] data) {

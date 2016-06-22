@@ -1,8 +1,8 @@
-package com.company.Repository;
+package com.company.repository;
 
-import com.company.StaticData.ExceptionMessages;
-import com.company.IO.OutputWriter;
-import com.company.StaticData.SessionData;
+import com.company.staticData.ExceptionMessages;
+import com.company.io.OutputWriter;
+import com.company.staticData.SessionData;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -124,5 +124,31 @@ public class StudentRepository {
         }
 
         return true;
+    }
+
+    public static void filterAndTake(String courseName, String filter) {
+        int studentsToTake = studentsByCourse.get(courseName).size();
+        filterAndTake(courseName, filter, studentsToTake);
+    }
+
+    public static void filterAndTake(String courseName, String filter, int studentsToTake) {
+        if (!isQueryForCoursePossible(courseName)) {
+            return;
+        }
+
+        RepositoryFilters.printFilteredStudents(studentsByCourse.get(courseName), filter, studentsToTake);
+    }
+
+    public static void orderAndTake(String courseName, String orderType, int studentsToTake) {
+        if (!isQueryForCoursePossible(courseName)) {
+            return;
+        }
+
+        RepositorySorters.printSortedStudents(studentsByCourse.get(courseName), orderType, studentsToTake);
+    }
+
+    public static void orderAndTake(String courseName, String orderType) {
+        int studentsToTake = studentsByCourse.get(courseName).size();
+        orderAndTake(courseName, orderType, studentsToTake);
     }
 }

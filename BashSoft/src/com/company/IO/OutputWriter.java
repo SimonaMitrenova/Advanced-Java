@@ -1,4 +1,4 @@
-package com.company.IO;
+package com.company.io;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ public class OutputWriter {
         System.out.println();
     }
     public static void displayException(String message){
-        System.out.println(message);
+        System.out.println("\u001B[31m" + message + "\u001B[0m");
     }
     public static void displayStudent(String studentName, List<Integer> studentMarks){
         String output = String.format("%s - %s", studentName, studentMarks.toString());

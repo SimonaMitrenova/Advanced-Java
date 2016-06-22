@@ -1,8 +1,8 @@
-package com.company;
+package com.company.io;
 
-import com.company.IO.OutputWriter;
-import com.company.StaticData.ExceptionMessages;
-import com.company.StaticData.SessionData;
+import com.company.io.OutputWriter;
+import com.company.staticData.ExceptionMessages;
+import com.company.staticData.SessionData;
 
 import java.io.File;
 import java.util.LinkedList;
@@ -43,12 +43,15 @@ public class IOManager {
     public static void createDirectoryInCurrentFolder(String name){
         String path = getCurrentDirectoryPath() + "\\" + name;
         File file = new File(path);
-        file.mkdir();
+        boolean wasDirMade = file.mkdir();
+        if (!wasDirMade) {
+            OutputWriter.displayException(
+                    ExceptionMessages.FORBIDDEN_SYMBOLS_CONTAINED_IN_NAME);
+        }
     }
 
     public static String getCurrentDirectoryPath() {
-        String currentPath = SessionData.currentPath;
-        return currentPath;
+        return SessionData.currentPath;
     }
 
     public static void changeCurrentDirRelativePath(String relativePath){
@@ -74,7 +77,7 @@ public class IOManager {
     public static void changeCurrentDirAbsolutePath(String absolutePath) {
         File file = new File(absolutePath);
         if (!file.exists()){
-            OutputWriter.displayException(ExceptionMessages.FILE_DOES_NOT_EXIST);
+            OutputWriter.displayException(ExceptionMessages.INVALID_PATH);
             return;
         }
 
